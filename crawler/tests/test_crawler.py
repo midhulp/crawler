@@ -25,4 +25,21 @@ def test_get_popular_artists():
     assert name100 == "Shakira"
     assert link100 == "https://www.songlyrics.com/shakira-lyrics/"
 
-    
+def test_get_popular_artists_song():
+    song_file = os.path.join(os.path.dirname(__file__), "data", "hillsong.html")
+    with open(song_file) as f:
+        data=f.read()
+    lyrics=crawler.get_lyrics(data)
+    lyr1, link1 = lyrics[0]
+
+    assert lyr1=="Oceans (Where Feet May Fail)"
+    assert link1=="https://www.songlyrics.com/hillsong/oceans-where-feet-may-fail-lyrics/"
+
+def test_get_song_lyrics():
+    lyric_file=os.path.join(os.path.dirname(__file__),"data","lyrics.html")
+    with open(lyric_file) as f:
+        data=f.read()
+    song_line=crawler.get_song_lyrics(data) 
+    assert song_line.startswith("You call me out upon the waters")
+    assert song_line.endswith("I am Yours and You are mine")
+
