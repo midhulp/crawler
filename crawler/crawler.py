@@ -17,7 +17,7 @@ def get_artists(data):
 
     # return ret
 
-def get_lyrics(data):
+def get_tracks(data):
      soup = BeautifulSoup(data, features="html.parser")
      lyrics = soup.find_all("table", {"class" : "tracklist"})
      ret1=[]
@@ -37,59 +37,50 @@ def get_song_lyrics(data):
         song_line=" "
     return song_line
 
-def get_save_lyrics(data):
-    
-    # artists = get_artists(data)
-    # lyrics = get_lyrics(data)
+def save_track(artist, track, lyrics):
+    artist = artist.replace("/","_").replace(" ","_").lower()
+    track = track.replace("/","_").replace(" ","_").lower()
+    artist_dir = os.path.join("hit_songs", artist)
+    os.makedirs(artist_dir,exist_ok=True)
+    track_path = os.path.join(artist_dir, track) + ".txt"
+    with open(track_path, "w") as f:
+        f.write(lyrics)
 
-    for i in data:
-            name = i[0]
-            link = i[1]
-            song_data= requests.get(link)
-            song_html_content = song_data.text
-            artist_folder = os.path.join("artists", name)
-            os.makedirs(artist_folder, exist_ok=True)
-            songs = get_lyrics(song_html_content)
-            
-    
-            for i in songs :
-                name = i[0].replace('/','_')
-                link = i[1]
-                if link:
-                        lyrics_get = requests.get(link)
-                        lyrics_file = lyrics_get.text
-                        lyrics = get_song_lyrics(lyrics_file)
-                        # song_folder = os.path.join(artist_folder, name)
-                        
-                        # os.makedirs(artist_folder, exist_ok=True)
-                        song_filename = os.path.join(artist_folder, f"{name}.txt")
-                        
-                        with open(song_filename, "w") as f:
-                            f.write(lyrics)
-
-
-
+def crawl(start_url):
+    data = requests.get(start_url).text
+    artists = get_artists(data)[:5]
+    for artist_name, artist_link in artists:
+        tracks_page = requests.get(artist_link).text
+        tracks = get_tracks(tracks_page)[:5]
+        for track_name, lyrics in tracks:
+            save_track(artist_name, track_name, lyrics)
+        
 def main():
-      data_file = os.path.join(os.path.dirname(__file__),"tests", "data", "top-artists-lyrics.html")
-      with open(data_file) as file:
-          data = file.read()
-          song_data = get_artists(data)[:5]
-          get_save_lyrics(song_data)
-    #   get_save_lyrics(data)
-        #  print("Done")
-
-
+   crawl("https://www.songlyrics.com/top-artists-lyrics.html")
+    
 if __name__ =="__main__":
     main()
+            
+
+
+
+
+
     
 
 
 
 
+           
 
 
 
-# def main():
-#         data=requests.get().text)
-#          get_artists(data)
+
+
+
+
+
+
+
+
 
