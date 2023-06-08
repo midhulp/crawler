@@ -19,7 +19,7 @@ def parse():
     crawl_parser.add_argument("--ntracks", help="Number of tracks to crawl per artist (Default : %(default)s)",
                               type=int,
                               default=5)
-    gettracks_parser = subparsers.add_parser("gettracks", help="Get all tracks of a specific artist")
+    gettracks_parser = subparsers.add_parser("gettracks", help="Get all tracks of a specific artist",)
     gettracks_parser.add_argument("artist", help="Name of the artist")
 
 
@@ -27,7 +27,7 @@ def parse():
     return args
 
 def handle_listartists(args):
-    artists=liblyrics1.get
+    artists=liblyrics1.get_artists()
     for idx, name in enumerate(artists, start=1):
         print (f"{idx}. {name}")
 
@@ -47,7 +47,7 @@ def handle_gettracks(args):
         for idx, track in enumerate(tracks, start=1):
             print(f"{idx}. {track}")
     else:
-        print("No tracks found for the artist.")
+        print("No tracks found for the artist or \nEnter in 'firstname lastname' format for artist with firstname and lastname")
 
 def main():
     commands = {"listartists" : handle_listartists,
