@@ -47,7 +47,7 @@ def handle_gettracks(args):
         for idx, track in enumerate(tracks, start=1):
             print(f"{idx}. {track}")
     else:
-        print("No tracks found for the artist or \nEnter in 'firstname lastname' format for artist with firstname and lastname")
+        print("No tracks found for the artist or \nEnter in 'Firstname Lastname' format for artist with firstname and lastname")
 
 def main():
     commands = {"listartists" : handle_listartists,
