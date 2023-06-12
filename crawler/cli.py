@@ -1,11 +1,15 @@
 import argparse
-
+import logging
+import db
+import utils
 import liblyrics1
+logger=utils.get_logger()
 
 def parse():
     parser = argparse.ArgumentParser(
         prog = "lyrics",
         description = "Offline song lyrics browser")
+    parser.add_argument("-d", "--debug", help = "Display detailed debug", action="store_true", default=False)
     
     subparsers = parser.add_subparsers(dest="command")
     subparsers.add_parser("listartists", help = "List of artists in the system")
@@ -27,12 +31,12 @@ def parse():
     return args
 
 def handle_listartists(args):
-    artists=liblyrics1.get_artists()
+    artists=db.get_artists()
     for idx, name in enumerate(artists, start=1):
         print (f"{idx}. {name}")
 
 def handle_initdb(args):
-    liblyrics1.initdb()
+    db.initdb()
 
 def handle_crawl(args):
     print (args)
@@ -42,12 +46,12 @@ def handle_crawl(args):
 
 def handle_gettracks(args):
     artist_name = args.artist
-    tracks = liblyrics1.get_tracks_by_artist(artist_name)
+    tracks = db.get_tracks_by_artist(artist_name)
     if tracks:
         for idx, track in enumerate(tracks, start=1):
             print(f"{idx}. {track}")
     else:
-        print("No tracks found for the artist or \nEnter in 'Firstname Lastname' format for artist with firstname and lastname")
+        print("No tracks found for the artist or \nEnter in 'Firstname Lastname' format for artist with firstname and lastname\nRun crawl if no artist found")
 
 def main():
     commands = {"listartists" : handle_listartists,
@@ -56,6 +60,7 @@ def main():
                 "gettracks": handle_gettracks}
 
     args = parse()
+    utils.setup_logger(args.debug)
     commands[args.command](args)
 
 if __name__ == "__main__":
