@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head><title>welcome to song</title></head>
+    <body>
+        <h1>Welcome to our lyrics</h1>
+        songs by <em><a href="{{url_for('artist')}}">{{artists.name}}</a></em>
+        <ol>{% for song in artists.tracks %}
+            <li><a href="{{url_for ('lyrics',song_id=song.id)}}">{{song.name}}</li>
+            {% endfor %}
+        </ol>
+    </body>
+    
+</html>

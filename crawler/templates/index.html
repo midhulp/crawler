@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head><title>welcome to artists list</title></head>
+    <body>
+        <h1>Welcome to our artists</h1>
+        <ol>{% for artist in artists %}
+            <li><a href="{{url_for('artistid', artist_id=artist.id)}}">{{artist.name}}</a></li>
+            {% endfor %}
+        </ol>
+    </body>S
+    
+</html>
